@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>درس ناطق تفاعلي - Top Grammar 1: Change into plural</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts matching the exact styles in the worksheet -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@600;700;800&family=Comic+Neue:wght@700&family=Fredoka:wght@500;600;700&family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --poster-orange: #f27a24;
+      --poster-green: #6b8e23;
+      --poster-purple: #c5b4d3;
+      --poster-table-header: #ebebd8;
+      --poster-singular-bg: #f6edf4;
+    }
+
+    body {
+      font-family: 'Baloo Bhaijaan 2', sans-serif;
+      background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      user-select: none;
+    }
+
+    /* English Fonts matching the poster */
+    .font-english-comic {
+      font-family: 'Fredoka', 'Comic Neue', cursive, sans-serif;
+    }
+
+    .font-english-serif {
+      font-family: 'Libre Baskerville', Georgia, serif;
+    }
+
+    /* Outlined text for "Change into plural" */
+    .outlined-title {
+      font-family: 'Libre Baskerville', Georgia, serif;
+      color: #d8cee6;
+      -webkit-text-stroke: 2px #463f57;
+      text-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
+      letter-spacing: 1px;
+    }
+
+    /* Outlined text for "NO" */
+    .outlined-no {
+      font-family: 'Fredoka', sans-serif;
+      color: #f8d7da;
+      -webkit-text-stroke: 2px #7a2e2e;
+      line-height: 1;
+    }
+
+    /* Poster Paper Container */
+    .poster-page {
+      position: relative;
+      width: 100%;
+      max-width: 780px;
+      background-color: #ffffff;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55), 0 0 0 6px rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      overflow: hidden;
+      direction: ltr; /* Poster layout is LTR */
+    }
+
+    /* Word Interactive Styling */
+    .english-word {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 8px;
+      padding: 2px 6px;
+      transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .english-word:hover {
+      background-color: rgba(254, 240, 138, 0.55);
+    }
+
+    /* Active word being spoken - highlighted cleanly without moving across letters */
+    .english-word.speaking-active {
+      background-color: #fef08a !important;
+      box-shadow: 0 0 0 3px #f59e0b, 0 6px 15px rgba(245, 158, 11, 0.35);
+      z-index: 30;
+    }
+
+    /* Stationary Pointing Finger Container - NO letter-by-letter animation! */
+    #reading-finger {
+      position: absolute;
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0;
+      /* Instant placement on the word without sliding across letters */
+      transition: opacity 0.12s ease;
+      filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.38));
+      transform: translate(-50%, 0);
+    }
+
+    #reading-finger.visible {
+      opacity: 1;
+    }
+
+    /* Cross-out slash over article (one / a / an) */
+    .article-token {
+      position: relative;
+      display: inline-block;
+      margin-right: 7px;
+      padding: 0 2px;
+    }
+
+    .article-slash {
+      position: absolute;
+      inset: -2px -4px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .article-slash.show-slash {
+      opacity: 1;
+    }
+
+    /* Table styling matching the scanned image */
+    .grammar-table {
+      width: 88%;
+      margin: 0 auto;
+      border-collapse: collapse;
+      position: relative;
+      z-index: 10;
+    }
+
+    .grammar-table th {
+      background-color: #ececd9;
+      border-top: 2px solid #9fa092;
+      border-bottom: 4px double #7b7794;
+      padding: 6px 12px;
+      font-size: clamp(1.35rem, 3.2vw, 1.85rem);
+      color: #2e3192;
+      font-family: 'Libre Baskerville', serif;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .grammar-table th:first-child,
+    .grammar-table td:first-child {
+      border-right: 2.5px solid #2e3168;
+      width: 48%;
+    }
+
+    .grammar-table td {
+      border-bottom: 1.8px solid #3f3f46;
+      padding: 5px 10px;
+      text-align: center;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.2rem, 2.8vw, 1.6rem);
+      height: 46px;
+      position: relative;
+    }
+
+    .grammar-table tr td:first-child {
+      background-color: rgba(244, 232, 241, 0.72);
+      color: #111827;
+    }
+
+    /* Last row in the original poster has a slightly warm beige tint on the left */
+    .grammar-table tr:last-child td:first-child {
+      background-color: rgba(232, 221, 209, 0.85);
+    }
+
+    .grammar-table tr td:last-child {
+      background-color: rgba(255, 255, 255, 0.72);
+    }
+
+    /* Dotted placeholder line in Plural column */
+    .dots-line {
+      letter-spacing: 2px;
+      color: #27272a;
+      font-weight: 700;
+      font-size: 1.15rem;
+    }
+
+    /* Plural answered text */
+    .plural-answer {
+      color: #c81e32;
+      font-weight: 700;
+      font-size: clamp(1.25rem, 2.9vw, 1.65rem);
+      letter-spacing: 0.5px;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #475569;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body class="pb-14">
+
+  <!-- Top Control Bar (Interactive Lesson Controls) -->
+  <header class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-700/80 shadow-xl px-3 py-2.5">
+    <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <!-- Lesson Title & Status -->
+      <div class="flex items-center gap-2.5">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center shadow-md text-white font-bold text-xl">
+          👆
+        </div>
+        <div>
+          <h1 class="text-white font-bold text-base sm:text-lg leading-tight flex items-center gap-2">
+            <span>الدرس الناطق: تحويل المفرد إلى جمع</span>
+            <span class="text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded-full">ينطق الإنجليزية فقط</span>
+          </h1>
+          <p id="status-bar-text" class="text-slate-300 text-xs sm:text-sm">
+            انقر على أي كلمة إنجليزية في البوستر لوضع الإصبع وقراءتها فوراً
+          </p>
+        </div>
+      </div>
+
+      <!-- Main Action Buttons -->
+      <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+        <button id="btn-play-all" onclick="toggleFullLesson()" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl font-bold text-sm bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white shadow-lg shadow-emerald-900/40 transition active:scale-95">
+          <svg id="icon-play" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <span id="text-play-all">تشغيل الدرس كاملاً</span>
+        </button>
+
+        <button id="btn-stop" onclick="stopReading()" class="hidden items-center gap-1 px-3 py-2 rounded-xl font-bold text-sm bg-rose-600 hover:bg-rose-500 text-white shadow-lg transition active:scale-95">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
+          <span>إيقاف</span>
+        </button>
+
+        <button onclick="revealAllAnswers(true)" class="px-3 py-2 rounded-xl font-bold text-xs sm:text-sm bg-indigo-600 hover:bg-indigo-500 text-white shadow transition active:scale-95">
+          إظهار حل الجمع
+        </button>
+
+        <button onclick="revealAllAnswers(false)" class="px-3 py-2 rounded-xl font-bold text-xs sm:text-sm bg-slate-700 hover:bg-slate-600 text-slate-200 shadow transition active:scale-95">
+          إعادة تعيين (كالأصل)
+        </button>
+
+        <!-- Speed Control -->
+        <div class="flex items-center bg-slate-800 border border-slate-700 rounded-xl px-2.5 py-1 text-xs text-slate-200 gap-1.5">
+          <span>السرعة:</span>
+          <select id="voice-rate" class="bg-transparent font-bold text-amber-400 focus:outline-none cursor-pointer">
+            <option value="0.75" class="bg-slate-800">بطيء وواضح</option>
+            <option value="0.9" selected class="bg-slate-800">طبيعي</option>
+            <option value="1.05" class="bg-slate-800">سريع</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Currently Spoken Word HUD Banner -->
+  <div class="max-w-3xl mx-auto mt-3 px-4">
+    <div class="bg-slate-800/90 border border-slate-700 rounded-2xl px-4 py-2.5 flex items-center justify-between shadow-lg">
+      <div class="flex items-center gap-2.5">
+        <span class="inline-block w-3 h-3 rounded-full bg-amber-400 animate-ping" id="hud-ping" style="opacity: 0;"></span>
+        <span class="text-slate-300 text-xs sm:text-sm font-medium">الكلمة المنطوقة الآن:</span>
+        <span id="hud-current-word" dir="ltr" class="font-english-comic text-amber-300 font-bold text-lg sm:text-xl tracking-wide px-2 py-0.5 rounded bg-slate-900/80 border border-slate-700 min-w-[130px] text-center">
+          Ready
+        </span>
+      </div>
+      <div class="text-xs text-slate-400 hidden sm:block">
+        💡 الإصبع يثبت عند الكلمة الإنجليزية مباشرة دون التحرك على الحروف
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Poster Container (Exact High-Resolution Recreation of the Worksheet) -->
+  <main class="px-2 sm:px-4 mt-4 flex justify-center">
+    <div id="poster-container" class="poster-page pb-8">
+
+      <!-- ================= STATIONARY POINTING FINGER (SVG) ================= -->
+      <!-- Placed dynamically on the active English word; never slides across letters -->
+      <div id="reading-finger" aria-hidden="true">
+        <svg width="64" height="78" viewBox="0 0 80 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Soft target ring at fingertip -->
+          <circle cx="38" cy="10" r="8" fill="rgba(245, 158, 11, 0.35)" stroke="#f59e0b" stroke-width="2"/>
+          <!-- Index Finger pointing straight up -->
+          <path d="M30 14C30 8.477 34.477 4 40 4C45.523 4 50 8.477 50 14V42H30V14Z" fill="#FFD1B3" stroke="#3B2314" stroke-width="3"/>
+          <!-- Fingernail -->
+          <path d="M33 13C33 9.5 36 7 40 7C44 7 47 9.5 47 13V17C47 18.1 46.1 19 45 19H35C33.9 19 33 18.1 33 17V13Z" fill="#FFF0E5" stroke="#D49B78" stroke-width="1.5"/>
+          <!-- Folded fingers & palm -->
+          <path d="M50 32C54.5 32 58 35.5 58 40V48H50V32Z" fill="#F7C19E" stroke="#3B2314" stroke-width="3"/>
+          <path d="M58 37C62.5 37 66 40.5 66 45V52H58V37Z" fill="#EFAFA0" stroke="#3B2314" stroke-width="3"/>
+          <path d="M66 42C70 42 73 45 73 49V57C73 68 64 76 52 76H32C21 76 14 68 14 57V45C14 39 19 35 25 35H30V50" fill="#FFD1B3" stroke="#3B2314" stroke-width="3" stroke-linecap="round"/>
+          <!-- Thumb -->
+          <path d="M14 46C9 46 6 41 8 36C10 31 18 29 25 33L30 36V49H18C15.5 49 14 47.5 14 46Z" fill="#FFD1B3" stroke="#3B2314" stroke-width="3"/>
+          <!-- Knuckle creases -->
+          <path d="M34 25H44" stroke="#D49B78" stroke-width="2" stroke-linecap="round"/>
+          <!-- Shirt Cuff & Sleeve -->
+          <path d="M24 75H60V83H24V75Z" fill="#FFFFFF" stroke="#3B2314" stroke-width="3"/>
+          <path d="M20 82H64L67 93H17L20 82Z" fill="#2563EB" stroke="#1E3A8A" stroke-width="3"/>
+          <circle cx="30" cy="87.5" r="2.5" fill="#FBBF24"/>
+        </svg>
+      </div>
+
+      <!-- ================= RIGHT WAVY COLORFUL BORDER (Exact Poster Detail) ================= -->
+      <div class="absolute top-0 right-0 bottom-0 w-5 sm:w-7 pointer-events-none z-20 flex flex-col justify-between overflow-hidden">
+        <svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 30 1000" fill="none">
+          <!-- Colorful wavy scallops along the right edge -->
+          <path d="M30 0 L5 0 Q22 25 5 50 Q22 75 5 100 Q22 125 5 150 Q22 175 5 200 Q22 225 5 250 L30 250 Z" fill="#f59e0b" opacity="0.85"/>
+          <path d="M30 250 L5 250 Q22 275 5 300 Q22 325 5 350 Q22 375 5 400 Q22 425 5 450 Q22 475 5 500 L30 500 Z" fill="#eab308" opacity="0.85"/>
+          <path d="M30 500 L5 500 Q22 525 5 550 Q22 575 5 600 Q22 625 5 650 Q22 675 5 700 Q22 725 5 750 L30 750 Z" fill="#3b82f6" opacity="0.85"/>
+          <path d="M30 750 L5 750 Q22 775 5 800 Q22 825 5 850 Q22 875 5 900 Q22 925 5 950 Q22 975 5 1000 L30 1000 Z" fill="#1d4ed8" opacity="0.85"/>
+        </svg>
+      </div>
+
+      <!-- ================= TOP SCALLOPED ORANGE HEADER & PUZZLE PIECES ================= -->
+      <div class="relative pt-2 pb-1 px-4 sm:px-7">
+        <!-- Orange Scalloped Top Background -->
+        <div class="absolute top-0 left-0 right-0 h-14 overflow-hidden pointer-events-none">
+          <div class="w-full h-8 bg-gradient-to-r from-amber-400 via-orange-500 to-orange-600"></div>
+          <!-- White clouds/scallops cutting into the orange bar -->
+          <div class="flex w-[110%] -ml-4 -mt-3">
+            <div class="w-14 h-10 rounded-full bg-white shrink-0"></div>
+            <div class="w-14 h-10 rounded-full bg-white shrink-0 -ml-2"></div>
+            <div class="w-14 h-10 rounded-full bg-white shrink-0 -ml-2"></div>
+            <div class="w-14 h-10 rounded-full bg-white shrink-0 -ml-2"></div>
+            <div class="w-14 h-10 rounded-full bg-white shrink-0 -ml-2"></div>
+            <div class="w-14 h-10 rounded-full bg-white shrink-0 -ml-2"></div>
+            <div class="w-14 h-10 rounded-full bg-white shrink-0 -ml-2"></div>
+            <div class="w-14 h-10 rounded-full bg-white shrink-0 -ml-2"></div>
+            <div class="w-14 h-10 rounded-full bg-white shrink-0 -ml-2"></div>
+            <div class="w-14 h-10 rounded-full bg-white shrink-0 -ml-2"></div>
+            <div class="w-14 h-10 rounded-full bg-white shrink-0 -ml-2"></div>
+            <div class="w-14 h-10 rounded-full bg-white shrink-0 -ml-2"></div>
+            <div class="w-14 h-10 rounded-full bg-white shrink-0 -ml-2"></div>
+            <div class="w-14 h-10 rounded-full bg-white shrink-0 -ml-2"></div>
+            <div class="w-14 h-10 rounded-full bg-white shrink-0 -ml-2"></div>
+          </div>
+        </div>
+
+        <!-- Top Row: 3 Interlocking Puzzle Pieces (Left) & Top Grammar 1 Badge (Right) -->
+        <div class="relative z-10 flex items-start justify-between">
+          <!-- 3 High-Res SVG Puzzle Pieces (Blue, Yellow, Salmon-Red) -->
+          <div class="w-44 sm:w-52 -mt-2 -ml-2 drop-shadow-md">
+            <svg viewBox="0 0 230 85" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Blue Puzzle Piece (Left) -->
+              <g filter="drop-shadow(1px 3px 2px rgba(0,0,0,0.25))">
+                <path d="M12 10 H62 V28 C68 24 76 28 76 36 C76 44 68 48 62 44 V65 H44 C46 57 39 52 33 52 C27 52 20 57 22 65 H12 V10 Z" fill="#6897BB" stroke="#4A7396" stroke-width="2"/>
+                <circle cx="36" cy="5" r="7" fill="#6897BB"/>
+              </g>
+              <!-- Yellow Puzzle Piece (Middle, slightly tilted) -->
+              <g transform="rotate(6 112 38)" filter="drop-shadow(1px 3px 2px rgba(0,0,0,0.25))">
+                <path d="M78 12 H135 V29 C142 25 149 29 149 37 C149 45 142 49 135 45 V66 H115 C115 73 109 79 102 79 C95 79 89 73 89 66 H78 V46 C84 48 90 43 90 36 C90 29 84 24 78 26 V12 Z" fill="#F5B82E" stroke="#D49617" stroke-width="2"/>
+              </g>
+              <!-- Red/Salmon Puzzle Piece (Right) -->
+              <g transform="rotate(-3 180 38)" filter="drop-shadow(1px 3px 2px rgba(0,0,0,0.25))">
+                <path d="M148 12 H205 V30 C197 30 193 35 193 41 C193 47 197 52 205 52 V66 H148 V46 C155 48 161 43 161 36 C161 29 155 24 148 26 V12 Z" fill="#DC7668" stroke="#B85649" stroke-width="2"/>
+                <circle cx="176" cy="7" r="7.5" fill="#DC7668"/>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Top Grammar 1 Pill Badge -->
+          <div class="mt-2 mr-3">
+            <div onclick="speakElement(this, 'Top Grammar 1')" data-speak="Top Grammar 1" class="english-word bg-white border-2 border-stone-300 shadow-md rounded-xl px-4 py-1 flex items-center gap-1.5">
+              <span class="font-english-comic font-extrabold text-stone-900 text-lg sm:text-xl tracking-tight">Top Grammar</span>
+              <span class="font-english-comic font-extrabold text-red-600 text-lg sm:text-xl">1</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Second Header Row: "NO X article" & Green Banner "لا نضع قبل الجمع a ولا an" -->
+        <div class="relative z-10 flex flex-wrap items-center justify-between gap-2 mt-1 px-1 sm:px-3">
+          <!-- Left: NO X article -->
+          <div onclick="speakElement(this, 'No article')" data-speak="No article" class="english-word flex items-center gap-2 p-1.5">
+            <div class="flex flex-col items-center leading-none">
+              <span class="outlined-no text-2xl sm:text-3xl font-extrabold">NO</span>
+              <!-- Red Cross X -->
+              <svg class="w-8 h-8 -mt-1" viewBox="0 0 40 40" fill="none">
+                <path d="M8 8 L32 32 M32 8 L8 32" stroke="#b91c1c" stroke-width="7" stroke-linecap="round"/>
+                <path d="M10 8 L30 32 M30 8 L10 32" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="font-english-comic font-bold text-3xl sm:text-5xl text-zinc-800 tracking-wide drop-shadow-sm">
+              article
+            </span>
+          </div>
+
+          <!-- Right/Center: Green Decorative Banner "لا نضع قبل الجمع a ولا an" -->
+          <div class="relative mx-auto sm:mx-0">
+            <!-- Green Cloud/Ticket SVG Background matching the poster -->
+            <div class="relative bg-[#76933c] border-2 border-[#5b732c] rounded-3xl px-6 sm:px-9 py-1.5 shadow-md flex flex-col items-center justify-center">
+              <!-- Left decorative notches -->
+              <div class="absolute left-1.5 top-2 bottom-2 flex flex-col justify-around">
+                <span class="w-3 h-1.5 bg-white rounded-full"></span>
+                <span class="w-3 h-1.5 bg-white rounded-full"></span>
+                <span class="w-3 h-1.5 bg-white rounded-full"></span>
+              </div>
+              <!-- Right decorative notches -->
+              <div class="absolute right-1.5 top-2 bottom-2 flex flex-col justify-around">
+                <span class="w-3 h-1.5 bg-white rounded-full"></span>
+                <span class="w-3 h-1.5 bg-white rounded-full"></span>
+                <span class="w-3 h-1.5 bg-white rounded-full"></span>
+              </div>
+
+              <!-- White Inner Oval Card -->
+              <div class="bg-white/95 rounded-2xl px-4 py-1 shadow-inner text-center">
+                <!-- Updated Arabic text -->
+                <div dir="rtl" class="font-bold text-stone-900 text-base sm:text-xl leading-tight select-none">
+                  لا نضع قبل الجمع a ولا an
+                </div>
+                <!-- Non-clickable text as requested -->
+                <div class="font-english-comic font-bold text-lg sm:text-xl text-stone-900 leading-none mt-0.5 select-none">
+                  <span>(a</span>
+                  <span class="mx-1.5 text-red-600">–</span>
+                  <span>an)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Third Header Row: Purple Title Box "Change into plural" -->
+        <div class="relative z-10 flex justify-center mt-3 mb-2">
+          <div onclick="speakElement(this, 'Change into plural')" data-speak="Change into plural" class="english-word bg-gradient-to-b from-[#d3c5e0] via-[#c3b3d4] to-[#b5a3c7] border-2 border-[#4a435a] rounded-xl px-6 sm:px-10 py-1.5 shadow-[0_4px_0_#4a435a,0_6px_12px_rgba(0,0,0,0.2)]">
+            <h2 class="outlined-title text-2xl sm:text-4xl font-bold tracking-wider">
+              Change into plural
+            </h2>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= MAIN TABLE SECTION (WITH FAINT WATERMARK) ================= -->
+      <div class="relative mt-1 px-2 sm:px-6">
+        <!-- Faint Center Watermark (Graduation Cap & "P / TOP" emblem just like the scan) -->
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-0 opacity-15">
+          <svg class="w-72 h-72" viewBox="0 0 200 200" fill="none">
+            <path d="M100 30 L170 65 L100 100 L30 65 Z" fill="#c084fc"/>
+            <path d="M60 82 V120 C60 135 140 135 140 120 V82" stroke="#c084fc" stroke-width="8" fill="none"/>
+            <circle cx="100" cy="115" r="55" stroke="#60a5fa" stroke-width="4" stroke-dasharray="6 6"/>
+            <text x="100" y="135" text-anchor="middle" fill="#a855f7" font-size="48" font-weight="bold" font-family="serif">TOP</text>
+          </svg>
+        </div>
+
+        <!-- The 15-Row Grammar Table -->
+        <table class="grammar-table">
+          <thead>
+            <tr>
+              <th>
+                <span onclick="speakElement(this, 'Singular')" data-speak="Singular" class="english-word">Singular</span>
+              </th>
+              <th>
+                <span onclick="speakElement(this, 'Plural')" data-speak="Plural" class="english-word">Plural</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="grammar-tbody">
+            <!-- Populated dynamically by JavaScript for clean interaction & accuracy -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ================= FOOTER SECTION (Mrs.Engy Moris, Page 11, 3 Kids on Pencil + TOP Sign) ================= -->
+      <div class="relative mt-5 px-4 sm:px-8 pt-2 flex items-end justify-between min-h-[115px]">
+
+        <!-- Bottom-Left Decorative Orange/Yellow Star Corner -->
+        <div class="absolute -bottom-8 -left-4 w-44 h-28 pointer-events-none z-0">
+          <svg viewBox="0 0 200 120" fill="none" class="w-full h-full">
+            <path d="M0 20 Q60 65 190 120 L0 120 Z" fill="#f59e0b"/>
+            <path d="M0 45 Q50 80 140 120 L0 120 Z" fill="#ea580c"/>
+            <!-- Small yellow stars -->
+            <polygon points="18,45 21,52 28,52 22,56 24,63 18,59 12,63 14,56 8,52 15,52" fill="#fde047"/>
+            <polygon points="42,78 44,83 49,83 45,86 46,91 42,88 38,91 39,86 35,83 40,83" fill="#fde047"/>
+          </svg>
+        </div>
+
+        <!-- Left: Mrs.Engy Moris Badge -->
+        <div class="relative z-10 mb-1">
+          <div onclick="speakElement(this, 'Mrs. Engy Moris')" data-speak="Mrs. Engy Moris" class="english-word bg-white border-2 border-stone-800 rounded-xl px-4 py-1.5 shadow-[-4px_5px_0_#1c1917]">
+            <span class="font-english-comic font-extrabold text-stone-900 text-lg sm:text-2xl tracking-tight">
+              Mrs.Engy Moris
+            </span>
+          </div>
+        </div>
+
+        <!-- Center: Page Number (11) in Circle -->
+        <div class="relative z-10 mb-4">
+          <div class="w-9 h-9 rounded-full bg-white border-2 border-stone-300 shadow-inner flex items-center justify-center font-bold text-stone-800 text-sm">
+            11
+          </div>
+        </div>
+
+        <!-- Right: High-Res Vector Illustration of the 3 Kids Riding the Giant Green Pencil with "TOP" Wooden Sign -->
+        <div class="relative z-10 w-52 sm:w-64 -mr-2 -mb-4">
+          <svg viewBox="0 0 270 145" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto drop-shadow-md">
+            <!-- Giant Flying Pencil (Tilted upwards from bottom-right to bottom-left) -->
+            <g transform="rotate(-19 155 105)">
+              <!-- Pencil Body (Green & Light Green stripes) -->
+              <rect x="65" y="88" width="175" height="32" rx="4" fill="#15803d" stroke="#14532d" stroke-width="2"/>
+              <rect x="65" y="95" width="175" height="12" fill="#4ade80"/>
+              <rect x="65" y="107" width="175" height="13" fill="#166534"/>
+              <!-- Pencil Yellow Wood Cone Tip -->
+              <polygon points="20,104 66,88 66,120" fill="#facc15" stroke="#854d0e" stroke-width="2" stroke-linejoin="round"/>
+              <!-- Pencil Dark Lead Point -->
+              <polygon points="20,104 36,98.5 36,109.5" fill="#1e293b"/>
+              <!-- Collar waves -->
+              <path d="M65 88 Q60 93 65 98 Q60 104 65 110 Q60 115 65 120" fill="none" stroke="#854d0e" stroke-width="2"/>
+            </g>
+
+            <!-- "TOP" Brown Wooden Sign on the left of the pencil -->
+            <g onclick="speakElement(this, 'Top')" class="cursor-pointer">
+              <!-- Sign pole held by the boy -->
+              <line x1="90" y1="90" x2="105" y2="95" stroke="#451a03" stroke-width="3.5" stroke-linecap="round"/>
+              <g transform="rotate(-7 54 95)">
+                <rect x="16" y="77" width="76" height="34" rx="4" fill="#7c2d12" stroke="#451a03" stroke-width="2.5"/>
+                <rect x="20" y="81" width="68" height="26" rx="2" fill="none" stroke="#fdba74" stroke-width="1" opacity="0.5"/>
+                <text x="54" y="102" text-anchor="middle" fill="#ffffff" font-family="Fredoka, sans-serif" font-weight="800" font-size="24" letter-spacing="1.5">TOP</text>
+              </g>
+            </g>
+
+            <!-- Kid 1 (Front Left): Blonde Boy in Green/Black Striped Shirt -->
+            <g transform="translate(95, 38)">
+              <!-- Legs sitting on pencil -->
+              <path d="M18 52 L14 68 L22 68" stroke="#1e293b" stroke-width="5" stroke-linecap="round"/>
+              <path d="M27 52 L25 67 L32 67" stroke="#1e293b" stroke-width="5" stroke-linecap="round"/>
+              <!-- Striped Shirt Torso -->
+              <rect x="13" y="31" width="20" height="22" rx="5" fill="#84cc16" stroke="#1e293b" stroke-width="2"/>
+              <line x1="14" y1="37" x2="32" y2="37" stroke="#1e293b" stroke-width="2.5"/>
+              <line x1="14" y1="43" x2="32" y2="43" stroke="#1e293b" stroke-width="2.5"/>
+              <line x1="14" y1="49" x2="32" y2="49" stroke="#1e293b" stroke-width="2.5"/>
+              <!-- Arms -->
+              <path d="M13 36 L2 48" stroke="#fed7aa" stroke-width="4.5" stroke-linecap="round"/>
+              <path d="M33 36 L41 44" stroke="#fed7aa" stroke-width="4.5" stroke-linecap="round"/>
+              <!-- Head -->
+              <circle cx="23" cy="18" r="13" fill="#fed7aa" stroke="#1e293b" stroke-width="2"/>
+              <!-- Blonde Hair -->
+              <path d="M10 16 C10 6 20 3 28 5 C34 7 37 12 36 17 C32 12 25 12 18 13 C14 14 11 16 10 16 Z" fill="#eab308" stroke="#854d0e" stroke-width="1.5"/>
+              <!-- Eyes & Smile -->
+              <circle cx="19" cy="18" r="1.6" fill="#1e293b"/>
+              <circle cx="27" cy="18" r="1.6" fill="#1e293b"/>
+              <path d="M19 23 Q23 27 27 23" stroke="#991b1b" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </g>
+
+            <!-- Kid 2 (Middle): Happy Girl in Pink Top with Raised Hands -->
+            <g transform="translate(148, 22)">
+              <!-- Legs -->
+              <path d="M17 50 L14 64" stroke="#1e3a8a" stroke-width="5" stroke-linecap="round"/>
+              <path d="M26 50 L26 63" stroke="#1e3a8a" stroke-width="5" stroke-linecap="round"/>
+              <!-- Raised Arms -->
+              <path d="M13 34 L4 22" stroke="#fed7aa" stroke-width="4" stroke-linecap="round"/>
+              <path d="M31 34 L39 22" stroke="#fed7aa" stroke-width="4" stroke-linecap="round"/>
+              <!-- Pink Shirt -->
+              <rect x="13" y="30" width="18" height="20" rx="5" fill="#ec4899" stroke="#1e293b" stroke-width="2"/>
+              <!-- Head -->
+              <circle cx="22" cy="17" r="12.5" fill="#fed7aa" stroke="#1e293b" stroke-width="2"/>
+              <!-- Brown Hair & Pigtail buns -->
+              <circle cx="9" cy="12" r="5" fill="#573018" stroke="#1e293b" stroke-width="1.5"/>
+              <circle cx="35" cy="12" r="5" fill="#573018" stroke="#1e293b" stroke-width="1.5"/>
+              <path d="M10 15 C11 6 33 6 34 15 C28 11 16 11 10 15 Z" fill="#573018"/>
+              <!-- Eyes & Open Smile -->
+              <circle cx="18" cy="17" r="1.6" fill="#1e293b"/>
+              <circle cx="26" cy="17" r="1.6" fill="#1e293b"/>
+              <path d="M18 22 Q22 26 26 22 Z" fill="#dc2626"/>
+            </g>
+
+            <!-- Kid 3 (Back Right): Girl in Purple Top with Pigtails -->
+            <g transform="translate(196, 5)">
+              <!-- Legs -->
+              <path d="M17 50 L14 63" stroke="#1e293b" stroke-width="5" stroke-linecap="round"/>
+              <path d="M26 50 L27 62" stroke="#1e293b" stroke-width="5" stroke-linecap="round"/>
+              <!-- Raised Arms -->
+              <path d="M13 33 L4 20" stroke="#fed7aa" stroke-width="4" stroke-linecap="round"/>
+              <path d="M31 33 L41 20" stroke="#fed7aa" stroke-width="4" stroke-linecap="round"/>
+              <!-- Purple Top -->
+              <rect x="13" y="30" width="18" height="20" rx="5" fill="#9333ea" stroke="#1e293b" stroke-width="2"/>
+              <!-- Head -->
+              <circle cx="22" cy="17" r="12.5" fill="#fed7aa" stroke="#1e293b" stroke-width="2"/>
+              <!-- Dark Hair with high pigtails -->
+              <path d="M6 8 Q2 3 9 3 Q13 5 12 11" fill="#27272a" stroke="#1e293b" stroke-width="1.5"/>
+              <path d="M38 8 Q42 3 35 3 Q31 5 32 11" fill="#27272a" stroke="#1e293b" stroke-width="1.5"/>
+              <path d="M10 15 C11 6 33 6 34 15 C28 11 16 11 10 15 Z" fill="#27272a"/>
+              <!-- Eyes & Smile -->
+              <circle cx="18" cy="17" r="1.6" fill="#1e293b"/>
+              <circle cx="26" cy="17" r="1.6" fill="#1e293b"/>
+              <path d="M18 22 Q22 26 26 22" stroke="#991b1b" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </g>
+          </svg>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script>
+    /**
+     * Exact 15 rows from the "Change into plural" worksheet image:
+     * All rows start without a crossed article by default.
+     * The line/cross-out appears precisely when the row is spoken or clicked.
+     */
+    const worksheetRows = [
+      { id: 1,  article: "one", noun: "dog",    plural: "Dogs",    defaultCrossed: false, defaultSolved: false },
+      { id: 2,  article: "a",   noun: "Tree",   plural: "Trees",   defaultCrossed: false, defaultSolved: false },
+      { id: 3,  article: "an",  noun: "apple",  plural: "Apples",  defaultCrossed: false, defaultSolved: false },
+      { id: 4,  article: "one", noun: "book",   plural: "Books",   defaultCrossed: false, defaultSolved: false },
+      { id: 5,  article: "one", noun: "table",  plural: "Tables",  defaultCrossed: false, defaultSolved: false },
+      { id: 6,  article: "one", noun: "rat",    plural: "Rats",    defaultCrossed: false, defaultSolved: false },
+      { id: 7,  article: "a",   noun: "cup",    plural: "Cups",    defaultCrossed: false, defaultSolved: false },
+      { id: 8,  article: "one", noun: "bird",   plural: "Birds",   defaultCrossed: false, defaultSolved: false },
+      { id: 9,  article: "one", noun: "pencil", plural: "Pencils", defaultCrossed: false, defaultSolved: false },
+      { id: 10, article: "a",   noun: "hand",   plural: "Hands",   defaultCrossed: false, defaultSolved: false },
+      { id: 11, article: "a",   noun: "boat",   plural: "Boats",   defaultCrossed: false, defaultSolved: false },
+      { id: 12, article: "one", noun: "boy",    plural: "Boys",    defaultCrossed: false, defaultSolved: false },
+      { id: 13, article: "one", noun: "girl",   plural: "Girls",   defaultCrossed: false, defaultSolved: false },
+      { id: 14, article: "a",   noun: "door",   plural: "Doors",   defaultCrossed: false, defaultSolved: false },
+      { id: 15, article: "a",   noun: "chair",  plural: "Chairs",  defaultCrossed: false, defaultSolved: false }
+    ];
+
+    // Track state of each row
+    const rowState = worksheetRows.map(r => ({
+      ...r,
+      crossed: r.defaultCrossed,
+      solved: r.defaultSolved
+    }));
+
+    const tbody = document.getElementById('grammar-tbody');
+    const fingerEl = document.getElementById('reading-finger');
+    const posterContainer = document.getElementById('poster-container');
+    const hudCurrentWord = document.getElementById('hud-current-word');
+    const hudPing = document.getElementById('hud-ping');
+
+    let activeWordEl = null;
+    let isAutoPlaying = false;
+    let autoPlayAbort = false;
+    let selectedEnglishVoice = null;
+
+    /**
+     * Render the 15 rows accurately inside the table
+     */
+    function renderTable() {
+      tbody.innerHTML = '';
+
+      rowState.forEach((row, index) => {
+        const tr = document.createElement('tr');
+
+        // Determine slash SVG style (Row 1 has an X slash in the original poster; Rows 2 & 3 have a diagonal slash)
+        const slashPath = row.id === 1
+          ? `<path d="M2 2 L38 26 M32 2 L8 26" stroke="#27272a" stroke-width="2.4" stroke-linecap="round"/>`
+          : `<path d="M6 2 L28 27" stroke="#27272a" stroke-width="2.4" stroke-linecap="round"/>`;
+
+        // Singular Cell
+        const tdSingular = document.createElement('td');
+        const fullSingularPhrase = `${row.article} ${row.noun}`;
+
+        tdSingular.innerHTML = `
+          <div class="inline-flex items-center justify-center">
+            <span id="singular-word-${row.id}"
+                  class="english-word"
+                  data-speak="${fullSingularPhrase}"
+                  title="انقر لقراءة الكلمة الإنجليزية">
+              <span class="article-token" id="article-token-${row.id}">
+                <span>${row.article}</span>
+                <svg id="slash-${row.id}" class="article-slash ${row.crossed ? 'show-slash' : ''}" viewBox="0 0 40 28" preserveAspectRatio="none">
+                  ${slashPath}
+                </svg>
+              </span>
+              <span>${row.noun}</span>
+            </span>
+          </div>
+        `;
+
+        // Clicking singular phrase reads the English phrase and displays the cross-out slash upon reading
+        const singularSpan = tdSingular.querySelector(`#singular-word-${row.id}`);
+        singularSpan.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          if (isAutoPlaying) stopReading();
+          
+          // Show the slash precisely when speaking begins
+          rowState[index].crossed = true;
+          updateRowVisual(index);
+          await speakElement(singularSpan, fullSingularPhrase);
+        });
+
+        // Plural Cell
+        const tdPlural = document.createElement('td');
+        tdPlural.innerHTML = `
+          <div class="inline-flex items-center justify-center w-full">
+            <span id="plural-word-${row.id}"
+                  class="english-word min-w-[140px]"
+                  data-speak="${row.plural}"
+                  title="انقر لإظهار وقراءة الجمع بالإنجليزية">
+              ${
+                row.solved
+                  ? `<span class="plural-answer">${row.plural}</span>`
+                  : `<span class="dots-line">....................</span>`
+              }
+            </span>
+          </div>
+        `;
+
+        const pluralSpan = tdPlural.querySelector(`#plural-word-${row.id}`);
+        pluralSpan.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          if (isAutoPlaying) stopReading();
+          
+          // Also cross out the singular article and reveal plural answer on click
+          rowState[index].crossed = true;
+          rowState[index].solved = true;
+          updateRowVisual(index);
+          await speakElement(pluralSpan, row.plural);
+        });
+
+        tr.appendChild(tdSingular);
+        tr.appendChild(tdPlural);
+        tbody.appendChild(tr);
+      });
+    }
+
+    /**
+     * Update a single row's DOM without re-rendering the whole table
+     */
+    function updateRowVisual(index) {
+      const row = rowState[index];
+      const slashEl = document.getElementById(`slash-${row.id}`);
+      const pluralSpan = document.getElementById(`plural-word-${row.id}`);
+
+      if (slashEl) {
+        if (row.crossed) slashEl.classList.add('show-slash');
+        else slashEl.classList.remove('show-slash');
+      }
+
+      if (pluralSpan) {
+        pluralSpan.innerHTML = row.solved
+          ? `<span class="plural-answer">${row.plural}</span>`
+          : `<span class="dots-line">....................</span>`;
+      }
+    }
+
+    /**
+     * Reveal all plural answers or reset back to the original poster state
+     */
+    function revealAllAnswers(showAll) {
+      if (isAutoPlaying) stopReading();
+      rowState.forEach((row, idx) => {
+        if (showAll) {
+          row.crossed = true;
+          row.solved = true;
+        } else {
+          row.crossed = false;
+          row.solved = false;
+        }
+        updateRowVisual(idx);
+      });
+      hideFinger();
+    }
+
+    /**
+     * Position the Pointing Finger directly underneath the target English word
+     * WITHOUT moving or sliding across individual letters.
+     */
+    function placeFingerOnElement(targetEl) {
+      if (!targetEl) return;
+
+      if (activeWordEl && activeWordEl !== targetEl) {
+        activeWordEl.classList.remove('speaking-active');
+      }
+
+      activeWordEl = targetEl;
+      activeWordEl.classList.add('speaking-active');
+
+      const posterRect = posterContainer.getBoundingClientRect();
+      const targetRect = targetEl.getBoundingClientRect();
+
+      // Calculate exact center X of the word, and bottom Y just underneath the word
+      const centerX = (targetRect.left - posterRect.left) + (targetRect.width / 2);
+      const bottomY = (targetRect.bottom - posterRect.top) - 4;
+
+      fingerEl.style.left = `${centerX}px`;
+      fingerEl.style.top = `${bottomY}px`;
+      fingerEl.classList.add('visible');
+    }
+
+    function hideFinger() {
+      fingerEl.classList.remove('visible');
+      if (activeWordEl) {
+        activeWordEl.classList.remove('speaking-active');
+        activeWordEl = null;
+      }
+      hudPing.style.opacity = '0';
+    }
+
+    // Reposition finger if window resizes while a word is active
+    window.addEventListener('resize', () => {
+      if (activeWordEl) {
+        placeFingerOnElement(activeWordEl);
+      }
+    });
+
+    /**
+     * Initialize Web Speech API English Voice
+     */
+    function initVoices() {
+      if (!('speechSynthesis' in window)) return;
+      const voices = window.speechSynthesis.getVoices();
+      if (!voices.length) return;
+
+      // Prefer clear native English voices (Google US/UK, Microsoft Natural, Apple Samantha/Daniel)
+      selectedEnglishVoice =
+        voices.find(v => v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Natural'))) ||
+        voices.find(v => v.lang === 'en-US' || v.lang === 'en-GB') ||
+        voices.find(v => v.lang.startsWith('en')) ||
+        null;
+    }
+
+    if ('speechSynthesis' in window) {
+      initVoices();
+      window.speechSynthesis.onvoiceschanged = initVoices;
+    }
+
+    /**
+     * Speak an English word/phrase and hold the pointing finger steadily at that element
+     */
+    function speakElement(element, englishText) {
+      return new Promise((resolve) => {
+        if (!('speechSynthesis' in window)) {
+          placeFingerOnElement(element);
+          hudCurrentWord.textContent = englishText;
+          setTimeout(() => {
+            hideFinger();
+            resolve();
+          }, 1000);
+          return;
+        }
+
+        // Cancel any ongoing speech
+        window.speechSynthesis.cancel();
+
+        // Place stationary finger on the word
+        placeFingerOnElement(element);
+        hudCurrentWord.textContent = englishText;
+        hudPing.style.opacity = '1';
+
+        // Scroll gently if the word is out of view
+        const rect = element.getBoundingClientRect();
+        if (rect.top < 90 || rect.bottom > window.innerHeight - 70) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          // Update finger coordinates after scroll settles
+          setTimeout(() => {
+            if (activeWordEl === element) placeFingerOnElement(element);
+          }, 250);
+        }
+
+        const utterance = new SpeechSynthesisUtterance(englishText);
+        utterance.lang = 'en-US';
+        if (selectedEnglishVoice) {
+          utterance.voice = selectedEnglishVoice;
+        }
+
+        const rateSelect = document.getElementById('voice-rate');
+        utterance.rate = rateSelect ? parseFloat(rateSelect.value) : 0.9;
+        utterance.pitch = 1.02;
+
+        let finished = false;
+        const finishSpeech = () => {
+          if (finished) return;
+          finished = true;
+          if (!isAutoPlaying) {
+            setTimeout(() => {
+              if (!isAutoPlaying && activeWordEl === element) {
+                hideFinger();
+              }
+            }, 350);
+          }
+          resolve();
+        };
+
+        utterance.onend = finishSpeech;
+        utterance.onerror = finishSpeech;
+
+        // Safety fallback timer in case browser TTS hangs
+        const fallbackMs = Math.max(1800, englishText.length * 180);
+        setTimeout(finishSpeech, fallbackMs);
+
+        window.speechSynthesis.speak(utterance);
+      });
+    }
+
+    /**
+     * Automated Full Lesson Playback (Reads ONLY English words in sequence)
+     */
+    async function toggleFullLesson() {
+      if (isAutoPlaying) {
+        stopReading();
+        return;
+      }
+
+      isAutoPlaying = true;
+      autoPlayAbort = false;
+
+      const btnPlayAll = document.getElementById('btn-play-all');
+      const btnStop = document.getElementById('btn-stop');
+      const textPlayAll = document.getElementById('text-play-all');
+
+      textPlayAll.textContent = 'جاري القراءة...';
+      btnPlayAll.classList.add('opacity-80');
+      btnStop.classList.remove('hidden');
+      btnStop.classList.add('flex');
+
+      // 1. Read English Header Items (Skips Arabic text "الجمع ميجيش قبلة" completely)
+      // 1. Read English Header Items (Skips Arabic text and non-clickable (a - an) completely)
+      const headerSelectors = [
+        '[data-speak="Top Grammar 1"]',
+        '[data-speak="No article"]',
+        '[data-speak="Change into plural"]',
+        '[data-speak="Singular"]',
+        '[data-speak="Plural"]'
+      ];
+
+      for (const selector of headerSelectors) {
+        if (autoPlayAbort) break;
+        const el = document.querySelector(selector);
+        if (el) {
+          await speakElement(el, el.getAttribute('data-speak'));
+          await delay(300);
+        }
+      }
+
+      // 2. Read each of the 15 rows (Singular -> cross out article -> reveal & read Plural)
+      for (let i = 0; i < rowState.length; i++) {
+        if (autoPlayAbort) break;
+
+        const row = rowState[i];
+        const singularEl = document.getElementById(`singular-word-${row.id}`);
+        const pluralEl = document.getElementById(`plural-word-${row.id}`);
+
+        // Read Singular phrase and display the cross-out slash precisely when reading starts
+        if (singularEl) {
+          row.crossed = true;
+          updateRowVisual(i);
+          await speakElement(singularEl, `${row.article} ${row.noun}`);
+          await delay(260);
+        }
+
+        if (autoPlayAbort) break;
+
+        // Reveal Plural and read it
+        if (pluralEl) {
+          row.solved = true;
+          updateRowVisual(i);
+          await speakElement(pluralEl, row.plural);
+          await delay(420);
+        }
+      }
+
+      stopReading();
+    }
+
+    function stopReading() {
+      autoPlayAbort = true;
+      isAutoPlaying = false;
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      hideFinger();
+
+      const btnPlayAll = document.getElementById('btn-play-all');
+      const btnStop = document.getElementById('btn-stop');
+      const textPlayAll = document.getElementById('text-play-all');
+
+      textPlayAll.textContent = 'تشغيل الدرس كاملاً';
+      btnPlayAll.classList.remove('opacity-80');
+      btnStop.classList.add('hidden');
+      btnStop.classList.remove('flex');
+    }
+
+    function delay(ms) {
+      return new Promise(res => setTimeout(res, ms));
+    }
+
+    // Initialize table on load
+    window.addEventListener('DOMContentLoaded', () => {
+      renderTable();
+    });
+  </script>
+</body>
+</html>
